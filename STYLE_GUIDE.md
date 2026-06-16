@@ -20,3 +20,33 @@ For our Community Support Tracker project, our team decided to use a clean and p
 * Light Gray: #F3F4F6
 * Dark Gray: #374151
 * White: #FFFFFF
+
+## Typography
+
+### Font Family
+
+```css
+font-family: Arial, Helvetica, sans-serif;
+```
+
+### Font Sizes
+
+* H1: 2rem
+* H2: 1.5rem
+* H3: 1.25rem
+* Body Text: 1rem
+* Small Text: 0.875rem
+
+## Buttons
+
+Primary buttons will use:
+
+* Background Color: #2563EB
+* Text Color: #FFFFFF
+* Border Radius: 5px
+* Padding: 10px 20px
+
+When a user hovers over a button, the background color will change to:
+
+* #1E3A8A
+
