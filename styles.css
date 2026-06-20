@@ -1,0 +1,31 @@
+/* Container setup */
+.star-rating {
+  direction: rtl; /* Reverses the order of stars */
+  font-size: 2em; /* Adjust star size */
+  display: inline-block;
+}
+
+/* Hide radio buttons */
+.star-rating input {
+  position: absolute;
+  opacity: 0;
+}
+
+/* Default star style */
+.star-rating label {
+  color: #ccc; /* Gray for empty stars */
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Fill stars when a specific star is hovered or checked */
+/* The ~ selector targets all siblings that follow the input in the DOM */
+.star-rating input:hover ~ label,
+.star-rating input:checked ~ label {
+  color: gold;
+}
+
+/* Optional: Highlight the current star and preceding ones more brightly on hover */
+.star-rating label:hover ~ label {
+  color: #ffa500; /* Orange for preceding stars */
+}   
