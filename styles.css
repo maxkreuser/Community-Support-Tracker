@@ -1,3 +1,16 @@
+#volunteer-section {
+    margin: 0 60px;
+}
+
+#volunteer-form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* /////////////////////////////////////////// */
+/* Star rating component */
+
 /* Container setup */
 .star-rating {
   direction: rtl; /* Reverses the order of stars */
