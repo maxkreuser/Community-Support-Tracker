@@ -41,4 +41,35 @@
 /* Optional: Highlight the current star and preceding ones more brightly on hover */
 .star-rating label:hover ~ label {
   color: #ffa500; /* Orange for preceding stars */
-}   
+}
+
+/* /////////////////////////////////////////// */
+/* Succes message component */
+
+#succes-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 60px;
+    text-align: center;
+    background-color: rgb(240, 240, 255);
+    border-radius: 12px;
+    z-index: 999;
+}
+
+#succes-message > p {
+    font-size: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+#blur-overlay {
+    position: fixed;   
+    inset: 0;
+    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 8;
+}

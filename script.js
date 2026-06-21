@@ -33,7 +33,10 @@ function addHours(event) {
         const formValues = {name: name.value, hours: hours.value, date: date.value, rating: ratingChecked.value}
         console.log(formValues)
         // volunteerForm.submit()
-        // submitMessage()
+        document.getElementById("succes-container").classList.remove("hidden")
+        setTimeout(() => {
+            document.getElementById("succes-container").classList.add("hidden")
+        }, 5000)
     }
 }
 
