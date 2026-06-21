@@ -30,7 +30,10 @@ function addHours(event) {
 
     console.log(valid)
     if (Object.values(valid).every(value => value)) {
-        volunteerForm.submit()
+        const formValues = {name: name.value, hours: hours.value, date: date.value, rating: ratingChecked.value}
+        console.log(formValues)
+        // volunteerForm.submit()
+        // submitMessage()
     }
 }
 
