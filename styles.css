@@ -72,7 +72,7 @@ form {
 
 label {
     display: block;
-    margin-top: 1rem;
+    margin-top: 2rem;
     margin-bottom: 0.4rem;
     color: #111827;
     font-weight: bold;
@@ -125,4 +125,118 @@ footer {
     text-align: center;
     padding: 1rem;
     margin-top: 4rem;
+}
+
+/* /////////////////////////////////////////// */
+/* Landing page Main content */
+
+#landing-content {
+
+}
+
+.activity-container {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* inherits the 4-column parent */
+  column-gap: 20px;
+  margin: 80px auto;
+  justify-items: center;
+}
+
+.activity-container h3 {
+  grid-column: 1 / 2;     /* left 2 columns */
+  align-content: end;
+}
+
+.activity-container button {
+  grid-column: 1 / 2;     /* left 2 columns */
+  width: 200px;
+  height: 80px;
+  align-content: start;
+}
+
+.activity-container img {
+  grid-column: 2 / -1;    /* right 2 columns */
+  grid-row: 1 / 3;        /* spans both h3 + button rows */
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+/* /////////////////////////////////////////// */
+/* CSS for Volunteer Section */
+/* /////////////////////////////////////////// */
+
+/* /////////////////////////////////////////// */
+/* Star rating component */
+
+/* Container setup */
+#rating-container {
+    display: flex;
+    gap: 10px;
+}
+
+.star-rating {
+  margin-top: 1rem;
+  direction: rtl; /* Reverses the order of stars */
+  font-size: 2em; /* Adjust star size */
+  display: inline-block;
+}
+
+/* Hide radio buttons */
+.star-rating input {
+  position: absolute;
+  opacity: 0;
+}
+
+/* Default star style */
+.star-rating label {
+  display: inline-block;
+  margin: 0; 
+  color: #ccc; /* Gray for empty stars */
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+/* Fill stars when a specific star is hovered or checked */
+/* The ~ selector targets all siblings that follow the input in the DOM */
+.star-rating input:hover ~ label,
+.star-rating input:checked ~ label {
+  color: gold;
+}
+
+/* Optional: Highlight the current star and preceding ones more brightly on hover */
+.star-rating label:hover ~ label {
+  color: #ffa500; /* Orange for preceding stars */
+}
+
+/* /////////////////////////////////////////// */
+/* Succes message component */
+
+#succes-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 60px;
+    text-align: center;
+    background-color: rgb(240, 240, 255);
+    border-radius: 12px;
+    z-index: 999;
+}
+
+#succes-message > p {
+    font-size: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+#blur-overlay {
+    position: fixed;   
+    inset: 0;
+    backdrop-filter: blur(6px);
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 8;
 }
