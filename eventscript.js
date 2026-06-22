@@ -10,5 +10,20 @@ function saveEventSignup(event) {
     const representativeEmail = document.getElementById("representativeEmail").value.trim();
     const role = document.getElementById("role").value;
 
-    console.log(eventName, representativeName, representativeEmail, role);
+    if (
+        eventName === "" ||
+        representativeName === "" ||
+        representativeEmail === "" ||
+        role === ""
+    ) {
+        alert("Please complete all fields.");
+        return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(representativeEmail)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
 }
