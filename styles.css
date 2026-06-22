@@ -10,12 +10,13 @@ body {
 }
 
 header {
-    background-color: #1E3A8A;
+    background: linear-gradient(135deg, #1E3A8A, #2563EB);
     color: white;
     padding: 1.2rem 12%;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 4px 15px rgba(37,99,235,0.25);
 }
 
 header h1 {
@@ -65,9 +66,8 @@ main h2 {
 form {
     background-color: white;
     padding: 2rem;
-    border-radius: 10px;
-    border-top: 4px solid #2563EB;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 label {
