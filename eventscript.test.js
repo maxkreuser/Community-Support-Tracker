@@ -1,6 +1,8 @@
 const {
     validateEventSignup,
-    createSignupObject
+    createSignupObject,
+    saveEventSignup,
+    getSignupRecord
 } = require("./eventscript");
 
 describe("Event Signup Unit Tests", () => {
@@ -74,6 +76,51 @@ describe("Event Signup Unit Tests", () => {
             representativeEmail: "ben@email.com",
             role: "Sponsor"
         });
+    });
+
+    test("form submission updates temporary data object", () => {
+        document.body.innerHTML = `
+            <form id="event-signup-form"></form>
+            <input id="eventName" value="Food Drive">
+            <input id="representativeName" value="Ben">
+            <input id="representativeEmail" value="ben@email.com">
+            <select id="role">
+                <option value="Sponsor" selected>Sponsor</option>
+            </select>
+        `;
+
+        saveEventSignup({
+            preventDefault: jest.fn()
+        });
+
+        expect(getSignupRecord()).toEqual({
+            eventName: "Food Drive",
+            representativeName: "Ben",
+            representativeEmail: "ben@email.com",
+            role: "Sponsor"
+        });
+    });
+
+    test("invalid form submission triggers validation feedback", () => {
+        const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
+
+        document.body.innerHTML = `
+            <form id="event-signup-form"></form>
+            <input id="eventName" value="">
+            <input id="representativeName" value="">
+            <input id="representativeEmail" value="">
+            <select id="role">
+                <option value=""></option>
+            </select>
+        `;
+
+        saveEventSignup({
+            preventDefault: jest.fn()
+        });
+
+        expect(alertSpy).toHaveBeenCalled();
+
+        alertSpy.mockRestore();
     });
 
 });
