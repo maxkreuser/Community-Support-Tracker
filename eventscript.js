@@ -2,6 +2,30 @@ const eventForm = document.getElementById("event-signup-form");
 
 let signupRecord = {};
 
+function validateEventSignup(eventName, representativeName, representativeEmail, role) {
+    if (
+        eventName === "" ||
+        representativeName === "" ||
+        representativeEmail === "" ||
+        role === ""
+    ) {
+        return false;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    return emailPattern.test(representativeEmail);
+}
+
+function createSignupObject(eventName, representativeName, representativeEmail, role) {
+    return {
+        eventName: eventName,
+        representativeName: representativeName,
+        representativeEmail: representativeEmail,
+        role: role
+    };
+}
+
 eventForm.addEventListener("submit", saveEventSignup);
 
 function saveEventSignup(event) {
@@ -13,32 +37,34 @@ function saveEventSignup(event) {
     const role = document.getElementById("role").value;
 
     if (
-        eventName === "" ||
-        representativeName === "" ||
-        representativeEmail === "" ||
-        role === ""
+        !validateEventSignup(
+            eventName,
+            representativeName,
+            representativeEmail,
+            role
+        )
     ) {
-        alert("Please complete all fields.");
+        alert("Please complete all fields and enter a valid email.");
         return;
     }
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailPattern.test(representativeEmail)) {
-        alert("Please enter a valid email address.");
-        return;
-    }
-
-    signupRecord = {
-        eventName: eventName,
-        representativeName: representativeName,
-        representativeEmail: representativeEmail,
-        role: role
-    };
+    signupRecord = createSignupObject(
+        eventName,
+        representativeName,
+        representativeEmail,
+        role
+    );
 
     console.log("Signup Saved:", signupRecord);
 
     alert("Event signup submitted successfully!");
 
-    eventForm.reset();
+eventForm.reset();
+    }
+
+if (typeof module !== "undefined") {
+    module.exports = {
+        validateEventSignup,
+        createSignupObject
+    };
 }
