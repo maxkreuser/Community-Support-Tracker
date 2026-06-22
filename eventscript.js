@@ -1,5 +1,7 @@
 const eventForm = document.getElementById("event-signup-form");
 
+let signupRecord = {};
+
 eventForm.addEventListener("submit", saveEventSignup);
 
 function saveEventSignup(event) {
@@ -26,4 +28,17 @@ function saveEventSignup(event) {
         alert("Please enter a valid email address.");
         return;
     }
+
+    signupRecord = {
+        eventName: eventName,
+        representativeName: representativeName,
+        representativeEmail: representativeEmail,
+        role: role
+    };
+
+    console.log("Signup Saved:", signupRecord);
+
+    alert("Event signup submitted successfully!");
+
+    eventForm.reset();
 }
