@@ -4,6 +4,10 @@ volunteerForm.addEventListener("submit", addHours)
 
 const valid = {name: false, hours: false, date: false, rating: false}
 
+/**
+ * The invokes on
+ * @param {Event} event - 
+ */
 function addHours(event) {
     event.preventDefault()
 

@@ -72,7 +72,7 @@ form {
 
 label {
     display: block;
-    margin-top: 1rem;
+    margin-top: 2rem;
     margin-bottom: 0.4rem;
     color: #111827;
     font-weight: bold;
@@ -127,27 +127,18 @@ footer {
     margin-top: 4rem;
 }
 
+/* /////////////////////////////////////////// */
 /* CSS for Volunteer Section */
+/* Star rating component */
 
-#volunteer-section {
-    margin: 0 60px;
-}
-
-#volunteer-form {
-    display: flex;
-    flex-direction: column;
-}
-
+/* Container setup */
 #rating-container {
     display: flex;
     gap: 10px;
 }
 
-/* /////////////////////////////////////////// */
-/* Star rating component */
-
-/* Container setup */
 .star-rating {
+  margin-top: 1rem;
   direction: rtl; /* Reverses the order of stars */
   font-size: 2em; /* Adjust star size */
   display: inline-block;
@@ -161,6 +152,8 @@ footer {
 
 /* Default star style */
 .star-rating label {
+  display: inline-block;
+  margin: 0; 
   color: #ccc; /* Gray for empty stars */
   cursor: pointer;
   transition: color 0.2s;
