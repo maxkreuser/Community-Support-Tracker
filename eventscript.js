@@ -26,7 +26,9 @@ function createSignupObject(eventName, representativeName, representativeEmail, 
     };
 }
 
-eventForm.addEventListener("submit", saveEventSignup);
+if (eventForm) {
+    eventForm.addEventListener("submit", saveEventSignup);
+}
 
 function saveEventSignup(event) {
     event.preventDefault();
