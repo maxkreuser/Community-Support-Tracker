@@ -67,6 +67,8 @@ eventForm.reset();
 if (typeof module !== "undefined") {
     module.exports = {
         validateEventSignup,
-        createSignupObject
+        createSignupObject,
+        saveEventSignup,
+        getSignupRecord: () => signupRecord
     };
 }
