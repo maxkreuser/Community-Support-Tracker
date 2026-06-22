@@ -84,8 +84,9 @@ select {
     width: 100%;
     padding: 0.85rem;
     border: 1px solid #CBD5E1;
-    border-radius: 5px;
+    border-radius: 12px;
     font-size: 1rem;
+    transition: all 0.3s ease;
 }
 
 input:focus,
@@ -97,14 +98,15 @@ select:focus {
 }
 
 button {
-    margin-top: 1.5rem;
+   margin-top: 1.5rem;
     padding: 0.85rem 1.5rem;
-    background-color: #2563EB;
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     font-weight: bold;
-     cursor: pointer;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 button:hover {
