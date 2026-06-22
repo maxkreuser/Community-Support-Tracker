@@ -61,7 +61,7 @@ function saveEventSignup(event) {
 
     alert("Event signup submitted successfully!");
 
-eventForm.reset();
+document.getElementById("event-signup-form").reset();
     }
 
 if (typeof module !== "undefined") {

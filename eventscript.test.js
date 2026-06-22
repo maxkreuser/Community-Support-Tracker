@@ -79,6 +79,7 @@ describe("Event Signup Unit Tests", () => {
     });
 
     test("form submission updates temporary data object", () => {
+        const alertSpy = jest.spyOn(window, "alert").mockImplementation(() => {});
         document.body.innerHTML = `
             <form id="event-signup-form"></form>
             <input id="eventName" value="Food Drive">
@@ -99,6 +100,7 @@ describe("Event Signup Unit Tests", () => {
             representativeEmail: "ben@email.com",
             role: "Sponsor"
         });
+        alertSpy.mockRestore();
     });
 
     test("invalid form submission triggers validation feedback", () => {
