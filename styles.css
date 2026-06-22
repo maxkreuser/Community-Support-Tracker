@@ -4,23 +4,37 @@
 
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #F3F4F6;
-    color: #1E3A8A;
+    font-family: "Segoe UI", Inter, Arial, sans-serif;
+    background: #F8FAFC;
+    color: #1E293B;
+    line-height: 1.6;
 }
 
 header {
     background: linear-gradient(135deg, #1E3A8A, #2563EB);
     color: white;
-    padding: 1.2rem 12%;
+    padding: 1.5rem 12%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 15px rgba(37,99,235,0.25);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
 }
 
 header h1 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    margin: 0;
 }
 
 header h3,
@@ -29,8 +43,9 @@ header p {
 }
 
 nav {
-    background-color: #1E3A8A;
-    padding: 0 12% 1rem;
+    background: white;
+    padding: 1rem 12%;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
 }
 
 nav ul {
@@ -43,13 +58,14 @@ nav ul {
 }
 
 nav a {
-    color: white;
+    color: #1E3A8A;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
 
 nav a:hover {
-    color: #DBEAFE;
+    color: #2563EB;
 }
 
 main {
@@ -59,33 +75,37 @@ main {
 }
 
 main h2 {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    color: #1E3A8A;
 }
 
+
 form {
-    background-color: white;
+    background: white;
     padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    border-radius: 18px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    border: 1px solid #E2E8F0;
 }
 
 label {
     display: block;
     margin-top: 1rem;
     margin-bottom: 0.4rem;
-    color: #111827;
-    font-weight: bold;
+    font-weight: 600;
+    color: #334155;
 }
 
 input,
 textarea,
 select {
     width: 100%;
-    padding: 0.85rem;
+    padding: 0.9rem 1rem;
     border: 1px solid #CBD5E1;
     border-radius: 12px;
     font-size: 1rem;
+    background: #F8FAFC;
     transition: all 0.3s ease;
 }
 
@@ -93,38 +113,42 @@ input:focus,
 textarea:focus,
 select:focus {
     outline: none;
+    background: white;
     border-color: #2563EB;
-    box-shadow: 0 0 0 3px #DBEAFE;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 button {
-   margin-top: 1.5rem;
-    padding: 0.85rem 1.5rem;
-    background: linear-gradient(135deg, #2563EB, #1D4ED8);
-    color: white;
+    margin-top: 1.5rem;
+    padding: 0.9rem 1.8rem;
     border: none;
     border-radius: 12px;
-    font-weight: bold;
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 button:hover {
-    background-color: #1E3A8A;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
 }
 
 #message {
     margin-top: 1.5rem;
-    padding: 1rem;
-    border-left: 4px solid #16A34A;
-    background-color: #ECFDF5;
+    padding: 1rem 1.25rem;
+    border-radius: 12px;
+    border-left: 5px solid #16A34A;
+    background: #F0FDF4;
     color: #166534;
 }
 
 footer {
-    background-color: #1E3A8A;
+    background: #0F172A;
     color: white;
     text-align: center;
-    padding: 1rem;
+    padding: 1.5rem;
     margin-top: 4rem;
 }
