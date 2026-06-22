@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Signup</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header>
+        <h1>Community Support Tracker</h1>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="donations.html">Donation Tracker</a></li>
+            <li><a href="volunteer.html">Volunteer Hours</a></li>
+            <li><a href="events.html">Event Signup</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="signup">
+            <h2>Event Signup</h2>
+
+            <form id="event-signup-form">
+                <div>
+                    <label for="eventName">
+                        Event Name
+                    </label>
+                    <input
+                        type="text"
+                        id="eventName"
+                        name="eventName"
+                        placeholder="Enter event name"
+                    >
+                </div>
+
+                <div>
+                    <label for="representativeName">
+                        Company Representative's Name
+                    </label>
+                    <input
+                        type="text"
+                        id="representativeName"
+                        name="representativeName"
+                        placeholder="Enter representative name"
+                    >
+                </div>
+
+                <div>
+                    <label for="representativeEmail">
+                        Representative's Email
+                    </label>
+                    <input
+                        type="email"
+                        id="representativeEmail"
+                        name="representativeEmail"
+                        placeholder="Enter email address"
+                    >
+                </div>
+
+                <div>
+                    <label for="role">
+                        Role Selection
+                    </label>
+
+                    <select id="role" name="role">
+                        <option value="">
+                            Select a Role
+                        </option>
+                        <option value="Sponsor">
+                            Sponsor
+                        </option>
+                        <option value="Participant">
+                            Participant
+                        </option>
+                        <option value="Organizer">
+                            Organizer
+                        </option>
+                    </select>
+                </div>
+
+                <button type="submit">
+                    Sign Up
+                </button>
+            </form>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Community Support Tracker</p>
+    </footer>
+<script src="eventscript.js"></script>
+</body>
+</html>
