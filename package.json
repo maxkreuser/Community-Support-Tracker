@@ -1,0 +1,21 @@
+{
+  "name": "community-support-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "eventscript.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maxkreuser/Community-Support-Tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/maxkreuser/Community-Support-Tracker/issues"
+  },
+  "homepage": "https://github.com/maxkreuser/Community-Support-Tracker#readme"
+}
