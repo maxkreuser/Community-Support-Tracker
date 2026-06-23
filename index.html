@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
  <header>
@@ -23,32 +22,31 @@
         </ul>
     </nav>
 
-    <main>
-        <h2>Donation Tracker</h2>
-
-        <form id="donationForm">
-
-            <label for="charityName">Charity Name</label>
-            <input type="text" id="charityName" required>
-
-            <label for="donationAmount">Donation Amount</label>
-            <input type="number" id="donationAmount" required>
-
-            <label for="donationDate">Date of Donation</label>
-            <input type="date" id="donationDate" required>
-
-            <label for="comment">Donor Comment</label>
-            <textarea id="comment"></textarea>
-
-            <button type="submit">Add Donation</button>
-
-        </form>
-
-        <div id="message"></div>
+    <main id="landing-content">
+        <h2>Welcome to the Community Support Tracker</h2>
+        <p>Choose the activity you want to track.</p>
+        <div class="activity-container">
+            <h3>Donations - add your donations</h3>
+            <button onclick="location.href='donations.html'">Add donation</button>
+            <img src="images/donation.jpg" alt="Bags of food to give for donation.">
+        </div>
+        <div class="activity-container">
+            <h3>Volunteer Hours - add your volunteer hours</h3>
+            <button onclick="location.href='volunteer.html'">Add hours</button>
+            <img src="images/volunteer.jpg" alt="Group of people in a cirlcle putting their hands in the middle.">
+        </div>
+        <div class="activity-container">
+            <h3>Event Sign-up - sign up to an event</h3>
+            <button onclick="location.href='events.html'">Sign-up</button>
+            <img src="images/events.jpg" alt="Scene of an event taking inside a large room.">
+        </div>
     </main>
 
     <footer>
         <p>&copy; 2026 PiXELL River Financial</p>
     </footer>
+
+    <script src="js/script.js"></script>
+>>>>>>>>> Temporary merge branch 2
 </body>
 </html>

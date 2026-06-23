@@ -125,4 +125,4 @@ describe("Event Signup Unit Tests", () => {
         alertSpy.mockRestore();
     });
 
-}); 
+});
