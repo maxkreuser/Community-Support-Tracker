@@ -1,6 +1,6 @@
 # STYLE_GUIDE.md
 
-# Community Support Tracker Style Guide
+## Community Support Tracker Style Guide
 
 For our Community Support Tracker project, our team decided to use a clean and professional design that is easy to use and accessible for all users. The following standards will be used across all pages to keep the website consistent.
 
@@ -49,4 +49,3 @@ Primary buttons will use:
 When a user hovers over a button, the background color will change to:
 
 * #1E3A8A
-
