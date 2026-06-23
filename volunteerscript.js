@@ -75,6 +75,18 @@ function errorMessage(element, name, message) {
     element.after(errorElement)
 }
 
+function applyBgColor() {
+    const rows = document.querySelectorAll(".table-rows")
+    for (const [index, row] of rows.entries()) {
+        if (index % 2 === 0) {
+            console.log(index)
+            row.style.backgroundColor = "#eee"
+        }
+    }
+}
+
+applyBgColor()
+
 if (typeof module !== "undefined") {
     module.exports = {
         addHours,
