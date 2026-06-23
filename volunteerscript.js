@@ -1,7 +1,10 @@
 const volunteerForm = document.getElementById("volunteer-form")
 
-volunteerForm.addEventListener("submit", addHours)
+if (volunteerForm) {
+    volunteerForm.addEventListener("submit", addHours)
+}
 
+const volunteerRecords = []
 const valid = {name: false, hours: false, date: false, rating: false}
 
 /**
@@ -32,15 +35,16 @@ function addHours(event) {
         }
     }
 
-    console.log(valid)
     if (Object.values(valid).every(value => value)) {
         const formValues = {name: name.value, hours: hours.value, date: date.value, rating: ratingChecked.value}
-        console.log(formValues)
-        // volunteerForm.submit()
+        volunteerRecords.push(formValues)
+
         document.getElementById("succes-container").classList.remove("hidden")
         setTimeout(() => {
             document.getElementById("succes-container").classList.add("hidden")
         }, 5000)
+
+        // volunteerForm.submit()
     }
 }
 
@@ -69,4 +73,14 @@ function errorMessage(element, name, message) {
     `
     errorElement.style = styles
     element.after(errorElement)
+}
+
+if (typeof module !== "undefined") {
+    module.exports = {
+        addHours,
+        verifyValue,
+        errorMessage,
+        volunteerRecords,
+        valid
+    };
 }
