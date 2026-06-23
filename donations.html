@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+ <header>
+        <div class = "logo">
+            <img src="images/Pixelriver.jpg" alt="Pixell River Financial logo">
+            <h1>Community Support Tracker</h1>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="donations.html">Donations</a></li>
+            <li><a href="volunteer.html">Volunteer Hours</a></li>
+            <li><a href="events.html">Event Signup</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <h2>Donation Tracker</h2>
+
+        <form id="donationForm">
+
+            <label for="charityName">Charity Name</label>
+            <input type="text" id="charityName" required placeholder="Enter charity name">
+
+            <label for="donationAmount">Donation Amount</label>
+            <input type="number" id="donationAmount" required placeholder="Enter donation amount">
+
+            <label for="donationDate">Date of Donation</label>
+            <input type="date" id="donationDate" required placeholder="Select donation date">
+
+            <label for="comment">Donor Comment</label>
+            <textarea id="comment" placeholder="Enter donor comment"></textarea>
+
+            <button type="submit">Add Donation</button>
+
+        </form>
+
+        <div id="message"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PiXELL River Financial</p>
+    </footer>
+
+    <script src="js/donations.js"></script>
+</body>
+</html>
