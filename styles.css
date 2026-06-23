@@ -154,11 +154,24 @@ footer {
 }
 
 /* /////////////////////////////////////////// */
-/* Landing page Main content */
+/* Table section */
 
-#landing-content {
+table {
+    width: 100%;
+    text-align: center;
 
 }
+
+th {
+    background-color: #ccc;
+}
+
+th, td {
+    padding: 12px;
+}
+
+/* /////////////////////////////////////////// */
+/* Landing page <main> content */
 
 .activity-container {
   grid-column: 1 / -1;
