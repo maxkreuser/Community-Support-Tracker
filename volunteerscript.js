@@ -115,9 +115,9 @@ function updateTable() {
     table.innerHTML += markup
 }
 
-function deleteRow() {
-    const row = document.get
-}
+// function deleteRow() {
+//     const row = document.get
+// }
 
 function applyBgColor() {
     const rows = document.querySelectorAll(".table-rows")
