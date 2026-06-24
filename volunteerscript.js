@@ -4,12 +4,12 @@ if (volunteerForm) {
     volunteerForm.addEventListener("submit", addHours)
 }
 
-const volunteerRecords = []
+let volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours")) || []
 const valid = {name: false, hours: false, date: false, rating: false}
 
 /**
  * The invokes on
- * @param {Event} event - 
+ * @param {Event} event -  
  */
 function addHours(event) {
     event.preventDefault()
@@ -38,6 +38,12 @@ function addHours(event) {
     if (Object.values(valid).every(value => value)) {
         const formValues = {name: name.value, hours: hours.value, date: date.value, rating: ratingChecked.value}
         volunteerRecords.push(formValues)
+        // setToStorage(formValues)
+
+        localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
+        volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours"))
+
+        updateTable()
 
         document.getElementById("succes-container").classList.remove("hidden")
         setTimeout(() => {
@@ -75,15 +81,51 @@ function errorMessage(element, name, message) {
     element.after(errorElement)
 }
 
+function populateTable() {
+    const table = document.querySelector("table")
+    for (const value of Object.values(volunteerRecords)) {
+        const markup = `
+            <tr class="table-rows">
+                <td>${value.name}</td>
+                <td>${value.hours}</td>
+                <td>${value.date}</td>
+                <td>${value.rating}</td>
+            </tr>
+        `
+        table.innerHTML += markup
+    }
+}
+
+populateTable()
+
+function updateTable() {
+    const table = document.querySelector("table")
+    const lastRecord = volunteerRecords[volunteerRecords.length - 1]
+    console.log(lastRecord)
+    const markup = `
+        <tr class="table-rows">
+            <td>${lastRecord.name}</td>
+            <td>${lastRecord.hours}</td>
+            <td>${lastRecord.date}</td>
+            <td>${lastRecord.rating}</td>
+        </tr>
+    `
+    table.innerHTML += markup
+}
+
 function applyBgColor() {
     const rows = document.querySelectorAll(".table-rows")
     for (const [index, row] of rows.entries()) {
         if (index % 2 === 0) {
-            console.log(index)
             row.style.backgroundColor = "#eee"
         }
     }
 }
+
+// function setToStorage(records) {
+
+//     localStorage.setItem("volunteer-hours", JSON.stringify(records))
+// }
 
 applyBgColor()
 
