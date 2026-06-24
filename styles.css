@@ -159,7 +159,6 @@ footer {
 table {
     width: 100%;
     text-align: center;
-
 }
 
 th {
@@ -167,7 +166,15 @@ th {
 }
 
 th, td {
-    padding: 12px;
+    padding: 16px;
+}
+
+.delete-btn {
+    background: linear-gradient(135deg, rgba(235, 37, 37, 0.5), rgba(216, 29, 29, 0.7));
+    padding: 0.25rem 0.7rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    margin-top: 0;
 }
 
 /* /////////////////////////////////////////// */

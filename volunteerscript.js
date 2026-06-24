@@ -83,13 +83,14 @@ function errorMessage(element, name, message) {
 
 function populateTable() {
     const table = document.querySelector("table")
-    for (const value of Object.values(volunteerRecords)) {
+    for (const [index, value] of Object.entries(volunteerRecords)) {
         const markup = `
-            <tr class="table-rows">
+            <tr class="table-rows" id="row-${index}">
                 <td>${value.name}</td>
                 <td>${value.hours}</td>
                 <td>${value.date}</td>
                 <td>${value.rating}</td>
+                <td><button class="delete-btn">X</button></td>
             </tr>
         `
         table.innerHTML += markup
@@ -103,14 +104,19 @@ function updateTable() {
     const lastRecord = volunteerRecords[volunteerRecords.length - 1]
     console.log(lastRecord)
     const markup = `
-        <tr class="table-rows">
+        <tr class="table-rows" id="row-${volunteerRecords.length - 1}">
             <td>${lastRecord.name}</td>
             <td>${lastRecord.hours}</td>
             <td>${lastRecord.date}</td>
             <td>${lastRecord.rating}</td>
+            <td><button class="delete-btn">X</button></td>
         </tr>
     `
     table.innerHTML += markup
+}
+
+function deleteRow() {
+    const row = document.get
 }
 
 function applyBgColor() {
@@ -121,11 +127,6 @@ function applyBgColor() {
         }
     }
 }
-
-// function setToStorage(records) {
-
-//     localStorage.setItem("volunteer-hours", JSON.stringify(records))
-// }
 
 applyBgColor()
 
