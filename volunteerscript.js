@@ -85,16 +85,17 @@ function populateTable() {
     const table = document.querySelector("table")
     for (const [index, value] of Object.entries(volunteerRecords)) {
         const markup = `
-            <tr class="table-rows" id="row-${index}">
+            <tr class="table-rows" data-index="${index}">
                 <td>${value.name}</td>
                 <td>${value.hours}</td>
                 <td>${value.date}</td>
                 <td>${value.rating}</td>
-                <td><button class="delete-btn">X</button></td>
+                <td><button class="delete-btn">Delete</button></td>
             </tr>
         `
         table.innerHTML += markup
     }
+    applyBgColor()
 }
 
 populateTable()
@@ -102,22 +103,42 @@ populateTable()
 function updateTable() {
     const table = document.querySelector("table")
     const lastRecord = volunteerRecords[volunteerRecords.length - 1]
-    console.log(lastRecord)
+    
+    // const tableRows = document.querySelectorAll(".table-rows")
+    // if (tableRows) tableRows.forEach((row) => row.remove())
+
     const markup = `
-        <tr class="table-rows" id="row-${volunteerRecords.length - 1}">
+        <tr class="table-rows" data-index="${volunteerRecords.length - 1}">
             <td>${lastRecord.name}</td>
             <td>${lastRecord.hours}</td>
             <td>${lastRecord.date}</td>
             <td>${lastRecord.rating}</td>
-            <td><button class="delete-btn">X</button></td>
+            <td><button class="delete-btn">Delete</button></td>
         </tr>
     `
     table.innerHTML += markup
+    applyBgColor()
 }
 
-// function deleteRow() {
-//     const row = document.get
-// }
+function setupTableListeners() {
+    document.querySelector("table").addEventListener("click", (event) => {
+        if (event.target.classList.contains("delete-btn")) {
+            const button = event.target
+            const row = button.closest("tr")
+            const rowId = row.dataset.index
+
+            volunteerRecords.splice(rowId, 1)
+            localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
+
+            // Delete table content and repopulate to reorder elements with new data-index to match volunteerRecords indexes.
+            const tableRows = document.querySelectorAll(".table-rows")
+            tableRows.forEach((row) => row.remove())
+            populateTable()
+        }
+    })
+}
+
+setupTableListeners()
 
 function applyBgColor() {
     const rows = document.querySelectorAll(".table-rows")
@@ -127,8 +148,6 @@ function applyBgColor() {
         }
     }
 }
-
-applyBgColor()
 
 if (typeof module !== "undefined") {
     module.exports = {
