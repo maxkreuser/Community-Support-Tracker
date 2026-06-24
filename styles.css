@@ -42,6 +42,10 @@ header p {
     display: none;
 }
 
+#blur {
+    display: none;
+}
+
 nav {
     background: white;
     padding: 1rem 12%;
@@ -333,6 +337,43 @@ th, td {
     }
 
     nav > ul {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        z-index: 999
+    }
+
+    nav > ul > li {
+        font-size: 24px;
+        color: white;
+        /* padding: 6px 18px;
+        background-color: white;
+        border-radius: 12px; */
+    }
+    
+    nav > ul > li > a {
+        color: white;
+    }
+
+    nav > ul > li > a:hover {
+        color: #bbb;
+    }
+
+    nav > ul > li > a:focus {
+        color: #bbb;
+    }
+
+    #blur {
+        position: fixed;   
+        inset: 0;
+        backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 8;
     }
 }
