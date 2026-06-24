@@ -1,7 +1,12 @@
 const volunteerForm = document.getElementById("volunteer-form")
+const iconMenuBtn = document.getElementById("icon-button")
 
 if (volunteerForm) {
     volunteerForm.addEventListener("submit", addHours)
+}
+
+if (iconMenuBtn) {
+    iconMenuBtn.addEventListener("click", showMobileMenu)
 }
 
 let volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours")) || []
@@ -146,6 +151,10 @@ function applyBgColor() {
         }
     }
 }
+
+// function showMobileMenu() {
+//     const menu = document.querySelector("nav>ul")
+// }
 
 populateTable()
 deleteButtonsAction()
