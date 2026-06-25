@@ -202,6 +202,25 @@ function applyBgColor() {
     }
 }
 
+// Event listener on the date input element that enables clicking
+// anywhere on the element to select a date.
+document.getElementById("volunteer-date").addEventListener("click", function(e) {
+    this.showPicker();
+    e.preventDefault();
+});
+
+// Limit max date selection to today in date input element
+// Get today's date
+const today = new Date();
+today.setDate(today.getDate());
+
+// Format as YYYY-MM-DD (local time)
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, '0');
+const dd = String(today.getDate()).padStart(2, '0');
+
+document.getElementById("volunteer-date").max = `${yyyy}-${mm}-${dd}`;
+
 // On load, populates the volunteer table with the data from localStorage
 // and adds event listener on table's 'deletion buttons'.
 populateTable()
