@@ -60,11 +60,17 @@ function addHours(event) {
         // Updating the UI table with the lastest volunteering object
         updateTable()
 
+        // Clearing form inputs
+        name.value = ""
+        hours.value = ""
+        date.value = ""
+        if (ratingChecked) ratingChecked.checked = false
+
         // Displaying a succes message
         document.getElementById("succes-container").classList.remove("hidden")
         setTimeout(() => {
             document.getElementById("succes-container").classList.add("hidden")
-        }, 5000)
+        }, 4000)
 
         // volunteerForm.submit()
     }
