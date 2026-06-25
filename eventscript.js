@@ -60,6 +60,13 @@ function saveEventSignup(event) {
         role
     );
 
+    eventSignups.push(signupRecord);
+
+    localStorage.setItem(
+        "eventSignups",
+        JSON.stringify(eventSignups)
+    );
+
     console.log("Signup Saved:", signupRecord);
 
     alert("Event signup submitted successfully!");
