@@ -2,6 +2,9 @@ const eventForm = document.getElementById("event-signup-form");
 
 let signupRecord = {};
 
+let eventSignups =
+    JSON.parse(localStorage.getItem("eventSignups")) || [];
+
 function validateEventSignup(eventName, representativeName, representativeEmail, role) {
     if (
         eventName === "" ||
