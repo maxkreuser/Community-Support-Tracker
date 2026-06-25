@@ -8,7 +8,7 @@ if (volunteerForm) {
 }
 
 // Gets volunteering data from storage
-let volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours")) || []
+const volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours")) || []
 
 // Object to hold form's input fields validity values
 const valid = {name: false, hours: false, date: false, rating: false}
@@ -53,9 +53,8 @@ function addHours(event) {
         // Updating record of all volunteer data objects
         volunteerRecords.push(formValues)
 
-        // Storing record in local storage and getting it back "to update the local record", forgot why...
+        // Storing record in local storage
         localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
-        volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours"))
 
         // Updating the UI table with the lastest volunteering object
         updateTable()
@@ -145,6 +144,7 @@ function populateTable() {
  * displays it (adds it) at the bottom of the volunteer table on the UI.
  */
 function updateTable() {
+    if (volunteerRecords.length === 0) return
     const table = document.querySelector("table")
     const lastRecord = volunteerRecords[volunteerRecords.length - 1]    
     const markup = `
@@ -211,38 +211,47 @@ function totalHours() {
     const totalEl = document.querySelector("#table-section > h3")
     let total = 0
     for (const value of Object.values(volunteerRecords)) total += Number(value.hours)
-    totalEl.textContent = `Total Voluntered Hours - ${total}H`
-    if (total === 0) {
-        totalEl.style.display = "none"
-    } else {
-        totalEl.style.display = "block"
+    if (totalEl) {
+        totalEl.textContent = `Total Voluntered Hours - ${total}H`
+        if (total === 0) {
+            totalEl.style.display = "none"
+        } else {
+            totalEl.style.display = "block"
+        }
     }
 }
 
-// Event listener on the date input element that enables clicking
-// anywhere on the element to select a date.
-const volunteerDateInput = document.getElementById("volunteer-date")
-if (volunteerDateInput) {
-    document.getElementById("volunteer-date").addEventListener("click", function(e) {
-        this.showPicker();
-        e.preventDefault();
-    });
+/**
+ * Refines the date input field element by enabling entire field to
+ * be clickable, and limiting the calendar dates to today and the past.
+ */
+function customizeDateInput() {
+    // Event listener on the date input element that enables clicking
+    // anywhere on the element to select a date.
+    const volunteerDateInput = document.getElementById("volunteer-date")
+        if (volunteerDateInput) {
+            document.getElementById("volunteer-date").addEventListener("click", function(e) {
+            this.showPicker();
+            e.preventDefault();
+        });
+    }
+
+    // Limit max date selection to today in date input element
+    // Get today's date
+    const today = new Date();
+    today.setDate(today.getDate());
+
+    // Format as YYYY-MM-DD (local time)
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+
+    if (volunteerDateInput) volunteerDateInput.max = `${yyyy}-${mm}-${dd}`;
 }
-
-// Limit max date selection to today in date input element
-// Get today's date
-const today = new Date();
-today.setDate(today.getDate());
-
-// Format as YYYY-MM-DD (local time)
-const yyyy = today.getFullYear();
-const mm = String(today.getMonth() + 1).padStart(2, '0');
-const dd = String(today.getDate()).padStart(2, '0');
-
-if (volunteerDateInput) volunteerDateInput.max = `${yyyy}-${mm}-${dd}`;
 
 // On load, populates the volunteer table with the data from localStorage
 // and adds event listener on table's 'deletion buttons'.
+customizeDateInput()
 populateTable()
 deleteButtonsAction()
 
@@ -253,6 +262,12 @@ if (typeof module !== "undefined") {
         verifyValue,
         errorMessage,
         volunteerRecords,
-        valid
+        valid,
+        populateTable,
+        updateTable,
+        deleteButtonsAction,
+        applyBgColor,
+        totalHours,
+        customizeDateInput
     };
 }
