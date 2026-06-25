@@ -137,6 +137,7 @@ function populateTable() {
         if (table) table.innerHTML += markup
     }
     applyBgColor()
+    totalHours()
 }
 
 /**
@@ -157,6 +158,7 @@ function updateTable() {
     `
     if (table) table.innerHTML += markup
     applyBgColor()
+    totalHours()
 }
 
 /**
@@ -198,6 +200,22 @@ function applyBgColor() {
         if (index % 2 === 0) {
             row.style.backgroundColor = "#eee"
         }
+    }
+}
+
+/**
+ * Calculates the total volunteer hours found the volunteerRecord and displays
+ * it below the volunteer table.
+ */
+function totalHours() {
+    const totalEl = document.querySelector("#table-section > h3")
+    let total = 0
+    for (const value of Object.values(volunteerRecords)) total += Number(value.hours)
+    totalEl.textContent = `Total Voluntered Hours - ${total}H`
+    if (total === 0) {
+        totalEl.style.display = "none"
+    } else {
+        totalEl.style.display = "block"
     }
 }
 
