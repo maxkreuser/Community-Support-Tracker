@@ -42,6 +42,10 @@ header p {
     display: none;
 }
 
+#blur {
+    display: none;
+}
+
 nav {
     background: white;
     padding: 1rem 12%;
@@ -66,6 +70,10 @@ nav a {
 
 nav a:hover {
     color: #2563EB;
+}
+
+#icon-button {
+    display: none;
 }
 
 main {
@@ -159,7 +167,6 @@ footer {
 table {
     width: 100%;
     text-align: center;
-
 }
 
 th {
@@ -167,7 +174,18 @@ th {
 }
 
 th, td {
-    padding: 12px;
+    padding: 16px;
+}
+
+.delete-btn {
+    /* border: 1px solid red; */
+    /* background: none; */
+    /* color: red; */
+    background: linear-gradient(135deg, rgba(235, 37, 37, 0.5), rgba(216, 29, 29, 0.7));
+    padding: 0.25rem 0.7rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+    margin-top: 0;
 }
 
 /* /////////////////////////////////////////// */
@@ -278,4 +296,84 @@ th, td {
     backdrop-filter: blur(6px);
     background: rgba(0, 0, 0, 0.3);
     z-index: 8;
+}
+
+/* /////////////////////////////////////////// */
+/* Media Queries */
+
+@media (max-width: 675px) {
+    #icon-button {
+        display: flex;
+        margin-right: 40px;
+        margin-top: 0;
+        padding: 0;
+        border: none;
+        background: none;
+        color: #1D4ED8;
+        
+    }
+
+    #icon-button:hover {
+        transform: translateY(-2px);
+        box-shadow: none;
+        color: #2563EB;
+    }
+
+    #icon-button:focus {
+        transform: translateY(-2px);
+        color: #2563EB;
+    }
+    
+    ion-icon {
+        font-size: 46px;
+    }
+    
+    nav {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        height: 57.6px;
+        padding: 8.8px;
+    }
+
+    nav > ul {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        z-index: 999
+    }
+
+    nav > ul > li {
+        font-size: 24px;
+        color: white;
+        /* padding: 6px 18px;
+        background-color: white;
+        border-radius: 12px; */
+    }
+    
+    nav > ul > li > a {
+        color: white;
+    }
+
+    nav > ul > li > a:hover {
+        color: #bbb;
+    }
+
+    nav > ul > li > a:focus {
+        color: #bbb;
+    }
+
+    #blur {
+        position: fixed;   
+        inset: 0;
+        backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 8;
+    }
 }
