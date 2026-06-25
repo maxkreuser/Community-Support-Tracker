@@ -198,7 +198,7 @@ function applyBgColor() {
     const rows = document.querySelectorAll(".table-rows")
     for (const [index, row] of rows.entries()) {
         if (index % 2 === 0) {
-            row.style.backgroundColor = "#eee"
+            row.style.backgroundColor = "rgb(238, 238, 238)"
         }
     }
 }

@@ -423,34 +423,53 @@ describe("localStorage persistence and table display on page load", () => {
     });
 });
 
-// describe("applyBgColor - background colors are applied on table rows", () => {
+describe("applyBgColor - background colors are applied on table rows", () => {
 
-//     beforeEach(() => {
-//         document.body.innerHTML = `
-//         <table>
-//             <tr>
-//                 <th>Charity Name</th>
-//                 <th>Hours</th>
-//                 <th>Date</th>
-//                 <th>Rating</th>
-//                 <th>Remove</th>
-//             </tr>
-//             </table>
-//             <h3 style="display: none;"></h3>
-//             `
+    beforeEach(() => {
+        document.body.innerHTML = `
+        <table>
+            <tr>
+                <th>Charity Name</th>
+                <th>Hours</th>
+                <th>Date</th>
+                <th>Rating</th>
+                <th>Remove</th>
+            </tr>
+            </table>
+            <h3 style="display: none;"></h3>
+            `
             
-//         volunteerRecords.push(
-//             { name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" },
-//             { name: "UNICEF", hours: "3", date: "2026-06-23", rating: "5" },
-//             { name: "Food Bank", hours: "2", date: "2026-06-24", rating: "3" }
-//         );
-//         populateTable()
-//         applyBgColor()
-//     })
-// }
+        volunteerRecords.push(
+            { name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" },
+            { name: "UNICEF", hours: "3", date: "2026-06-23", rating: "5" },
+            { name: "Food Bank", hours: "2", date: "2026-06-24", rating: "3" }
+        );
+        populateTable()
+    })
+    
+    test("background color is applied on correct rows", () => {
+        const rows = document.querySelectorAll(".table-rows")
+        expect(rows[0].style.backgroundColor).toBe("rgb(238, 238, 238)")
+        expect(rows[1].style.backgroundColor).toBe("")
+        expect(rows[2].style.backgroundColor).toBe("rgb(238, 238, 238)")
+    })
+
+    test("does not crash when no table rows exist", () => {
+        volunteerRecords.length = 0;
+        document.querySelectorAll(".table-rows").forEach(r => r.remove());
+        expect(() => applyBgColor()).not.toThrow();
+    });
+
+    test("calling twice produces the same result", () => {
+        applyBgColor();
+        const firstPass = [...document.querySelectorAll(".table-rows")].map(r => r.style.backgroundColor);
+        applyBgColor();
+        const secondPass = [...document.querySelectorAll(".table-rows")].map(r => r.style.backgroundColor);
+        expect(secondPass).toEqual(firstPass);
+    });
+})
 
 
-// applyBgColor,
 // totalHours,
 // customizeDateInput
 
