@@ -37,11 +37,6 @@ header h1 {
     margin: 0;
 }
 
-header h3,
-header p {
-    display: none;
-}
-
 #blur {
     display: none;
 }
@@ -88,6 +83,18 @@ main h2 {
     color: #1E3A8A;
 }
 
+.activity-container h3 {
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+main > p {
+    font-size: 1.2rem;
+}
+
+.title {
+    font-size: 1.8rem;
+}
 
 form {
     background: white;
