@@ -12,6 +12,29 @@ const {
     customizeDateInput
 } = require("./volunteerscript");
 
+describe("module-level initialization", () => {
+    test("attaches submit listener to form when present in DOM", () => {
+        document.body.innerHTML = `
+            <form id="volunteer-form">
+                <input id="volunteer-charity-name">
+                <input id="hours">
+                <input id="volunteer-date">
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5">
+                </div>
+            </form>
+            <div id="succes-container"></div>
+        `;
+
+        jest.isolateModules(() => {
+            require("./volunteerscript");
+            // Dispatch submit — addHours should fire and create validation errors
+            document.getElementById("volunteer-form").dispatchEvent(new Event("submit"));
+            expect(document.getElementById("name-error")).not.toBeNull();
+        });
+    });
+});
+
 describe("addHours integration tests", () => {
 
     beforeEach(() => {
@@ -104,6 +127,57 @@ describe("addHours integration tests", () => {
         expect(rows.length).toBe(1);
         expect(rows[0].cells[0].textContent).toBe("Salvation Army");
     });
+
+    test("removes rating error when a star is selected after invalid submission", () => {
+        addHours({ preventDefault: jest.fn() });
+        expect(document.getElementById("rating-error")).not.toBeNull();
+
+        document.getElementById("star4").checked = true;
+        addHours({ preventDefault: jest.fn() });
+        expect(document.getElementById("rating-error")).toBeNull();
+    });
+
+    test("hides success message after 4 seconds", () => {
+        jest.useFakeTimers();
+
+        document.getElementById("volunteer-charity-name").value = "Red Cross";
+        document.getElementById("hours").value = "5";
+        document.getElementById("volunteer-date").value = "2026-06-22";
+        document.getElementById("star3").checked = true;
+
+        addHours({ preventDefault: jest.fn() });
+
+        expect(document.getElementById("succes-container")
+            .classList.contains("hidden")).toBe(false);
+
+        jest.advanceTimersByTime(4000);
+
+        expect(document.getElementById("succes-container")
+            .classList.contains("hidden")).toBe(true);
+
+        jest.useRealTimers();
+    });
+
+    test("does not duplicate rating error if one already exists", () => {
+        // First invalid submission creates the error
+        addHours({ preventDefault: jest.fn() });
+        const errorSpans = document.querySelectorAll('[id$="-error"]').length;
+
+        // Second invalid submission — guard should prevent duplicates
+        addHours({ preventDefault: jest.fn() });
+        expect(document.querySelectorAll('[id$="-error"]').length).toBe(errorSpans);
+    });
+
+    test("unchecks the rating star after successful submission", () => {
+        document.getElementById("volunteer-charity-name").value = "Red Cross";
+        document.getElementById("hours").value = "5";
+        document.getElementById("volunteer-date").value = "2026-06-22";
+        document.getElementById("star3").checked = true;
+
+        addHours({ preventDefault: jest.fn() });
+
+        expect(document.getElementById("star3").checked).toBe(false);
+    });   
 });
 
 describe("verifyValue - empty fields test", () => {
@@ -155,6 +229,46 @@ describe("errorMessage - testing message element creation", () => {
         expect(error).not.toBeNull();
         expect(error.tagName).toBe("SPAN");
         expect(error.textContent).toBe("Username is required.");
+    });
+
+    test("applies red styling to the error span", () => {
+        const input = document.getElementById("test-field");
+        errorMessage(input, "email", "Invalid email.");
+        const error = document.getElementById("email-error");
+        expect(error.style.color).toBe("red");
+        expect(error.style.fontWeight).toBe("600");
+        expect(error.style.marginLeft).toBe("20px");
+    });
+
+    test("inserts the error span immediately after the target element", () => {
+        const input = document.getElementById("test-field");
+        errorMessage(input, "field", "Error.");
+        const error = document.getElementById("field-error");
+        expect(error.previousElementSibling).toBe(input);
+    });
+
+    test("creates independent error spans for different elements", () => {
+        document.body.innerHTML = `
+            <input id="name-input">
+            <input id="email-input">
+        `;
+        const nameInput = document.getElementById("name-input");
+        const emailInput = document.getElementById("email-input");
+
+        errorMessage(nameInput, "name", "Name is required.");
+        errorMessage(emailInput, "email", "Email is required.");
+
+        expect(document.getElementById("name-error").textContent).toBe("Name is required.");
+        expect(document.getElementById("email-error").textContent).toBe("Email is required.");
+    });
+
+    test("works with different element types like select", () => {
+        document.body.innerHTML = `<select id="test-select"><option value="">Choose</option></select>`;
+        const select = document.getElementById("test-select");
+        errorMessage(select, "role", "Select a role.");
+        const error = document.getElementById("role-error");
+        expect(error).not.toBeNull();
+        expect(error.textContent).toBe("Select a role.");
     });
 });
 
@@ -228,6 +342,14 @@ describe("populateTable - testing rows creation and correct data insertion", () 
         expect(rows[1].cells[0].textContent).toBe("UNICEF");
         expect(rows[2].cells[0].textContent).toBe("Food Bank");
     });
+
+    test("populateTable writes rows into the table element", () => {
+        volunteerRecords.length = 0;
+        volunteerRecords.push({ name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" });
+        populateTable();
+        const table = document.querySelector("table");
+        expect(table.innerHTML).toContain("table-rows");
+    });
 })
 
 describe("updateTable - testing single row append to table", () => {
@@ -296,6 +418,12 @@ describe("updateTable - testing single row append to table", () => {
         expect(document.querySelectorAll(".table-rows").length).toBe(2);
         expect(document.querySelectorAll(".table-rows")[0].cells[0].textContent).toBe("First");
         expect(document.querySelectorAll(".table-rows")[1].cells[0].textContent).toBe("Second");
+    });
+
+    test("updateTable exits early when volunteerRecords is empty", () => {
+        volunteerRecords.length = 0;
+        expect(() => updateTable()).not.toThrow();
+        expect(document.querySelectorAll(".table-rows").length).toBe(0);
     });
 });
 
@@ -427,14 +555,14 @@ describe("applyBgColor - background colors are applied on table rows", () => {
 
     beforeEach(() => {
         document.body.innerHTML = `
-        <table>
-            <tr>
-                <th>Charity Name</th>
-                <th>Hours</th>
-                <th>Date</th>
-                <th>Rating</th>
-                <th>Remove</th>
-            </tr>
+            <table>
+                <tr>
+                    <th>Charity Name</th>
+                    <th>Hours</th>
+                    <th>Date</th>
+                    <th>Rating</th>
+                    <th>Remove</th>
+                </tr>
             </table>
             <h3 style="display: none;"></h3>
             `
@@ -469,12 +597,312 @@ describe("applyBgColor - background colors are applied on table rows", () => {
     });
 })
 
+describe("totalHours - testing return output to display", () => {
 
-// totalHours,
-// customizeDateInput
+    beforeEach(() => {
+        document.body.innerHTML = `
+            <section id="table-section">
+                <h3 style="display: none;"></h3>
+            </section>
+            `
+        volunteerRecords.length = 0
+    })
+    
+    test("verify sum of hours is accurate", () => {
+        volunteerRecords.push(
+            { name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" },
+            { name: "UNICEF", hours: "3", date: "2026-06-23", rating: "5" },
+            { name: "Food Bank", hours: "2", date: "2026-06-24", rating: "3" }
+        );
+        totalHours()
+        const h3 = document.querySelector("#table-section > h3")
+        expect(h3.textContent).toBe("Total Voluntered Hours - 10H")
+    })
 
+    test("verify h3 element stays hidden if no hours recorded", () => {
+        volunteerRecords.push({ name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" })
+        volunteerRecords.length = 0
+        totalHours()
+        const h3 = document.querySelector("#table-section > h3")
+        expect(h3.style.display).toBe("none")
+    })
 
-// Unit Tests:
-    // Test the function for calculating the total volunteer hours.
-    // Test that deleting a record updates the localStorage and table correctly.
-    // Test that the total volunteer hours update when a record is deleted.
+    test("returns 0 when no records exist", () => {
+        totalHours();
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 0H");
+    });
+
+    test("returns 0 when all records have 0 hours", () => {
+        volunteerRecords.push(
+            { name: "A", hours: "0", date: "2026-01-01", rating: "5" },
+            { name: "B", hours: "0", date: "2026-01-02", rating: "4" }
+        );
+        totalHours();
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 0H");
+    });
+
+    test("sums hours from a single record", () => {
+        volunteerRecords.push({ name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" });
+        totalHours();
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 5H");
+    });
+
+    test("shows the element when total is greater than 0", () => {
+        volunteerRecords.push({ name: "Red Cross", hours: "3", date: "2026-06-22", rating: "5" });
+        totalHours();
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.style.display).toBe("block");
+    });
+
+    test("does not crash when the h3 element is missing", () => {
+        document.body.innerHTML = ``;
+        expect(() => totalHours()).not.toThrow();
+    });
+})
+
+describe("customizeDateInput", () => {
+    beforeEach(() => {
+        document.body.innerHTML = `<input type="date" id="volunteer-date">`;
+    });
+
+    test("sets the max attribute on the date input to today's date", () => {
+        customizeDateInput();
+        const input = document.getElementById("volunteer-date");
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        expect(input.max).toBe(`${yyyy}-${mm}-${dd}`);
+    });
+
+    test("does not crash when the date input element is missing", () => {
+        document.body.innerHTML = ``;
+        expect(() => customizeDateInput()).not.toThrow();
+    });
+
+    test("`customizeDateInput` adds click listener that calls showPicker on module init", () => {
+        document.body.innerHTML = `<input type="date" id="volunteer-date">`;
+
+        jest.isolateModules(() => {
+            require("./volunteerscript");
+            const input = document.getElementById("volunteer-date");
+            expect(input.max).toBeTruthy(); // verify customizeDateInput ran
+
+            const showPickerMock = jest.fn();
+            input.showPicker = showPickerMock;
+            const event = new MouseEvent("click", { bubbles: true });
+            const preventDefaultSpy = jest.spyOn(event, "preventDefault");
+            input.dispatchEvent(event);
+
+            expect(showPickerMock).toHaveBeenCalled();
+            expect(preventDefaultSpy).toHaveBeenCalled();
+        });
+    });
+});
+
+describe("total volunteer hours update after record deletion", () => {
+    beforeEach(() => {
+        document.body.innerHTML = `
+            <section id="table-section">
+                <table>
+                    <tr>
+                        <th>Charity Name</th>
+                        <th>Hours</th>
+                        <th>Date</th>
+                        <th>Rating</th>
+                        <th>Remove</th>
+                    </tr>
+                </table>
+                <h3 style="display: none;"></h3>
+            </section>
+        `;
+        volunteerRecords.length = 0;
+        volunteerRecords.push(
+            { name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" },
+            { name: "UNICEF", hours: "3", date: "2026-06-23", rating: "5" },
+            { name: "Food Bank", hours: "2", date: "2026-06-24", rating: "3" }
+        );
+        populateTable();
+        deleteButtonsAction();
+        // Initial total should be 10
+    });
+
+    afterEach(() => localStorage.clear());
+
+    test("decreases total after deleting a record", () => {
+        document.querySelectorAll(".delete-btn")[1].click(); // delete UNICEF (3h)
+
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 7H"); // 5 + 2 = 7
+    });
+
+    test("shows correct total after deleting the first record", () => {
+        document.querySelector(".delete-btn").click(); // delete Red Cross (5h)
+
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 5H"); // 3 + 2 = 5
+    });
+
+    test("shows correct total after deleting the last record", () => {
+        document.querySelectorAll(".delete-btn")[2].click(); // delete Food Bank (2h)
+
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 8H"); // 5 + 3 = 8
+    });
+
+    test("shows 0H and hides element when the only record is deleted", () => {
+        // Keep only one record
+        volunteerRecords.length = 0;
+        volunteerRecords.push({ name: "Solo", hours: "4", date: "2026-01-01", rating: "5" });
+        // Re-render and re-attach listener
+        document.body.innerHTML = `
+            <section id="table-section">
+                <table>
+                    <tr>
+                        <th>Charity Name</th>
+                        <th>Hours</th>
+                        <th>Date</th>
+                        <th>Rating</th>
+                        <th>Remove</th>
+                    </tr>
+                </table>
+                <h3 style="display: none;"></h3>
+            </section>
+        `;
+        volunteerRecords.length = 0;
+        volunteerRecords.push({ name: "Solo", hours: "4", date: "2026-01-01", rating: "5" });
+        populateTable();
+        deleteButtonsAction();
+
+        document.querySelector(".delete-btn").click();
+
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 0H");
+        expect(h3.style.display).toBe("none");
+    });
+
+    test("total updates correctly after multiple deletions", () => {
+        document.querySelectorAll(".delete-btn")[0].click(); // delete Red Cross (5h) → total 5
+        document.querySelectorAll(".delete-btn")[1].click(); // delete Food Bank (2h) → total 3
+
+        const h3 = document.querySelector("#table-section > h3");
+        expect(h3.textContent).toBe("Total Voluntered Hours - 3H"); // only UNICEF left
+    });
+});
+
+describe("deleting a record updates localStorage and table correctly", () => {
+    beforeEach(() => {
+        document.body.innerHTML = `
+            <section id="table-section">
+                <table>
+                    <tr>
+                        <th>Charity Name</th>
+                        <th>Hours</th>
+                        <th>Date</th>
+                        <th>Rating</th>
+                        <th>Remove</th>
+                    </tr>
+                </table>
+                <h3 style="display: none;"></h3>
+            </section>
+        `;
+        volunteerRecords.length = 0;
+        volunteerRecords.push(
+            { name: "Red Cross", hours: "5", date: "2026-06-22", rating: "4" },
+            { name: "UNICEF", hours: "3", date: "2026-06-23", rating: "5" },
+            { name: "Food Bank", hours: "2", date: "2026-06-24", rating: "3" }
+        );
+        populateTable();
+        deleteButtonsAction();
+    });
+
+    afterEach(() => localStorage.clear());
+
+    test("localStorage removes the deleted record", () => {
+        document.querySelectorAll(".delete-btn")[1].click(); // delete UNICEF
+
+        const stored = JSON.parse(localStorage.getItem("volunteer-hours"));
+        expect(stored.length).toBe(2);
+        expect(stored[0].name).toBe("Red Cross");
+        expect(stored[1].name).toBe("Food Bank");
+    });
+
+    test("table row count matches localStorage after deletion", () => {
+        document.querySelectorAll(".delete-btn")[0].click();
+
+        const stored = JSON.parse(localStorage.getItem("volunteer-hours"));
+        const rows = document.querySelectorAll(".table-rows");
+        expect(rows.length).toBe(stored.length);
+    });
+
+    test("table cell data matches localStorage after deletion", () => {
+        document.querySelectorAll(".delete-btn")[2].click(); // delete Food Bank
+
+        const stored = JSON.parse(localStorage.getItem("volunteer-hours"));
+        const rows = document.querySelectorAll(".table-rows");
+        stored.forEach((record, i) => {
+            const rowCells = rows[i].querySelectorAll("td");
+            expect(rowCells[0].textContent).toBe(record.name);
+            expect(rowCells[1].textContent).toBe(record.hours);
+            expect(rowCells[3].textContent).toBe(record.rating);
+        });
+    })
+
+    test("data-index is re-sequenced after deletion to match array order", () => {
+        document.querySelectorAll(".delete-btn")[0].click(); // delete Red Cross
+
+        const stored = JSON.parse(localStorage.getItem("volunteer-hours"));
+        const rows = document.querySelectorAll(".table-rows");
+        rows.forEach((row, i) => {
+            expect(row.dataset.index).toBe(String(i));
+            expect(row.cells[0].textContent).toBe(stored[i].name);
+        });
+    });
+
+    test("deleting the last remaining record clears the table and localStorage", () => {
+        volunteerRecords.length = 0;
+        volunteerRecords.push({ name: "Solo", hours: "4", date: "2026-01-01", rating: "5" });
+        document.body.innerHTML = `
+            <section id="table-section">
+                <table>
+                    <tr>
+                        <th>Charity Name</th>
+                        <th>Hours</th>
+                        <th>Date</th>
+                        <th>Rating</th>
+                        <th>Remove</th>
+                    </tr>
+                </table>
+                <h3 style="display: none;"></h3>
+            </section>
+        `;
+        populateTable();
+        deleteButtonsAction();
+
+        document.querySelector(".delete-btn").click();
+
+        expect(JSON.parse(localStorage.getItem("volunteer-hours"))).toEqual([]);
+        expect(document.querySelectorAll(".table-rows").length).toBe(0);
+    });
+
+    test("deleting all records one by one keeps localStorage and table in sync", () => {
+        // Delete all three records sequentially
+        document.querySelectorAll(".delete-btn")[0].click();
+        let stored = JSON.parse(localStorage.getItem("volunteer-hours"));
+        expect(stored.length).toBe(2);
+        expect(document.querySelectorAll(".table-rows").length).toBe(2);
+
+        document.querySelectorAll(".delete-btn")[0].click();
+        stored = JSON.parse(localStorage.getItem("volunteer-hours"));
+        expect(stored.length).toBe(1);
+        expect(document.querySelectorAll(".table-rows").length).toBe(1);
+
+        document.querySelectorAll(".delete-btn")[0].click();
+        stored = JSON.parse(localStorage.getItem("volunteer-hours"));
+        expect(stored.length).toBe(0);
+        expect(document.querySelectorAll(".table-rows").length).toBe(0);
+    });
+})
