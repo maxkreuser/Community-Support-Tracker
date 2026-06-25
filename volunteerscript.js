@@ -134,7 +134,7 @@ function populateTable() {
                 <td><button class="delete-btn">Delete</button></td>
             </tr>
         `
-        table.innerHTML += markup
+        if (table) table.innerHTML += markup
     }
     applyBgColor()
 }
@@ -145,21 +145,17 @@ function populateTable() {
  */
 function updateTable() {
     const table = document.querySelector("table")
-    const lastRecord = volunteerRecords[volunteerRecords.length - 1]
-    
-    // const tableRows = document.querySelectorAll(".table-rows")
-    // if (tableRows) tableRows.forEach((row) => row.remove())
-    
+    const lastRecord = volunteerRecords[volunteerRecords.length - 1]    
     const markup = `
-    <tr class="table-rows" data-index="${volunteerRecords.length - 1}">
-    <td>${lastRecord.name}</td>
-    <td>${lastRecord.hours}</td>
-    <td>${lastRecord.date}</td>
+        <tr class="table-rows" data-index="${volunteerRecords.length - 1}">
+            <td>${lastRecord.name}</td>
+            <td>${lastRecord.hours}</td>
+            <td>${lastRecord.date}</td>
             <td>${lastRecord.rating}</td>
             <td><button class="delete-btn">Delete</button></td>
         </tr>
     `
-    table.innerHTML += markup
+    if (table) table.innerHTML += markup
     applyBgColor()
 }
 
@@ -172,22 +168,25 @@ function updateTable() {
  */
 function deleteButtonsAction() {
     // Setting up table listeners on buttons
-    document.querySelector("table").addEventListener("click", (event) => {
-        if (event.target.classList.contains("delete-btn")) {
-            const button = event.target
-            const row = button.closest("tr")
-            const rowId = row.dataset.index
-            
-            // Deleting record and storing updated record in localStorage
-            volunteerRecords.splice(rowId, 1)
-            localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
+    const table = document.querySelector("table")
+    if (table) {
+        table.addEventListener("click", (event) => {
+            if (event.target.classList.contains("delete-btn")) {
+                const button = event.target
+                const row = button.closest("tr")
+                const rowId = row.dataset.index
+                
+                // Deleting record and storing updated record in localStorage
+                volunteerRecords.splice(rowId, 1)
+                localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
 
-            // Delete table content and repopulate to reorder elements with new data-index to match volunteerRecords indexes.
-            const tableRows = document.querySelectorAll(".table-rows")
-            tableRows.forEach((row) => row.remove())
-            populateTable()
-        }
-    })
+                // Delete table content and repopulate to reorder elements with new data-index to match volunteerRecords indexes.
+                const tableRows = document.querySelectorAll(".table-rows")
+                tableRows.forEach((row) => row.remove())
+                populateTable()
+            }
+        })
+    }
 }
 
 /**
@@ -204,10 +203,13 @@ function applyBgColor() {
 
 // Event listener on the date input element that enables clicking
 // anywhere on the element to select a date.
-document.getElementById("volunteer-date").addEventListener("click", function(e) {
-    this.showPicker();
-    e.preventDefault();
-});
+const volunteerDateInput = document.getElementById("volunteer-date")
+if (volunteerDateInput) {
+    document.getElementById("volunteer-date").addEventListener("click", function(e) {
+        this.showPicker();
+        e.preventDefault();
+    });
+}
 
 // Limit max date selection to today in date input element
 // Get today's date
@@ -219,7 +221,7 @@ const yyyy = today.getFullYear();
 const mm = String(today.getMonth() + 1).padStart(2, '0');
 const dd = String(today.getDate()).padStart(2, '0');
 
-document.getElementById("volunteer-date").max = `${yyyy}-${mm}-${dd}`;
+if (volunteerDateInput) volunteerDateInput.max = `${yyyy}-${mm}-${dd}`;
 
 // On load, populates the volunteer table with the data from localStorage
 // and adds event listener on table's 'deletion buttons'.
