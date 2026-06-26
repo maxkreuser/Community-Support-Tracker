@@ -27,6 +27,35 @@ function createSignupObject(eventName, representativeName, representativeEmail, 
         representativeEmail: representativeEmail,
         role: role
     };
+} 
+
+function populateTable() {
+
+    const tableBody =
+    document.getElementById("event-table-body");
+
+    if (!tableBody) {
+        return;
+    }
+
+    tableBody.innerHTML = "";
+
+    eventSignups.forEach(function (signup) {
+
+        tableBody.innerHTML += `
+            <tr>
+                <td>${signup.eventName}</td>
+                <td>${signup.representativeName}</td>
+                <td>${signup.representativeEmail}</td>
+                <td>${signup.role}</td>
+                <td>
+                    <button>Delete</button>
+                </td>
+            </tr>
+        `;
+
+    });
+
 }
 
 if (eventForm) {
@@ -67,6 +96,8 @@ function saveEventSignup(event) {
         JSON.stringify(eventSignups)
     );
 
+    populateTable();
+
     console.log("Signup Saved:", signupRecord);
 
     alert("Event signup submitted successfully!");
@@ -82,3 +113,8 @@ if (typeof module !== "undefined") {
         getSignupRecord: () => signupRecord
     };
 }
+
+if (document.getElementById("event-table-body")) {
+    populateTable();
+}
+
