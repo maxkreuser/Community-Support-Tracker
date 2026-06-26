@@ -8,7 +8,7 @@ if (volunteerForm) {
 }
 
 // Gets volunteering data from storage
-let volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours")) || []
+const volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours")) || []
 
 // Object to hold form's input fields validity values
 const valid = {name: false, hours: false, date: false, rating: false}
@@ -53,18 +53,23 @@ function addHours(event) {
         // Updating record of all volunteer data objects
         volunteerRecords.push(formValues)
 
-        // Storing record in local storage and getting it back "to update the local record", forgot why...
+        // Storing record in local storage
         localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
-        volunteerRecords = JSON.parse(localStorage.getItem("volunteer-hours"))
 
         // Updating the UI table with the lastest volunteering object
         updateTable()
+
+        // Clearing form inputs
+        name.value = ""
+        hours.value = ""
+        date.value = ""
+        if (ratingChecked) ratingChecked.checked = false
 
         // Displaying a succes message
         document.getElementById("succes-container").classList.remove("hidden")
         setTimeout(() => {
             document.getElementById("succes-container").classList.add("hidden")
-        }, 5000)
+        }, 4000)
 
         // volunteerForm.submit()
     }
@@ -128,9 +133,10 @@ function populateTable() {
                 <td><button class="delete-btn">Delete</button></td>
             </tr>
         `
-        table.innerHTML += markup
+        if (table) table.innerHTML += markup
     }
     applyBgColor()
+    totalHours()
 }
 
 /**
@@ -138,23 +144,21 @@ function populateTable() {
  * displays it (adds it) at the bottom of the volunteer table on the UI.
  */
 function updateTable() {
+    if (volunteerRecords.length === 0) return
     const table = document.querySelector("table")
-    const lastRecord = volunteerRecords[volunteerRecords.length - 1]
-    
-    // const tableRows = document.querySelectorAll(".table-rows")
-    // if (tableRows) tableRows.forEach((row) => row.remove())
-    
+    const lastRecord = volunteerRecords[volunteerRecords.length - 1]    
     const markup = `
-    <tr class="table-rows" data-index="${volunteerRecords.length - 1}">
-    <td>${lastRecord.name}</td>
-    <td>${lastRecord.hours}</td>
-    <td>${lastRecord.date}</td>
+        <tr class="table-rows" data-index="${volunteerRecords.length - 1}">
+            <td>${lastRecord.name}</td>
+            <td>${lastRecord.hours}</td>
+            <td>${lastRecord.date}</td>
             <td>${lastRecord.rating}</td>
             <td><button class="delete-btn">Delete</button></td>
         </tr>
     `
-    table.innerHTML += markup
+    if (table) table.innerHTML += markup
     applyBgColor()
+    totalHours()
 }
 
 /**
@@ -166,22 +170,25 @@ function updateTable() {
  */
 function deleteButtonsAction() {
     // Setting up table listeners on buttons
-    document.querySelector("table").addEventListener("click", (event) => {
-        if (event.target.classList.contains("delete-btn")) {
-            const button = event.target
-            const row = button.closest("tr")
-            const rowId = row.dataset.index
-            
-            // Deleting record and storing updated record in localStorage
-            volunteerRecords.splice(rowId, 1)
-            localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
+    const table = document.querySelector("table")
+    if (table) {
+        table.addEventListener("click", (event) => {
+            if (event.target.classList.contains("delete-btn")) {
+                const button = event.target
+                const row = button.closest("tr")
+                const rowId = row.dataset.index
+                
+                // Deleting record and storing updated record in localStorage
+                volunteerRecords.splice(rowId, 1)
+                localStorage.setItem("volunteer-hours", JSON.stringify(volunteerRecords))
 
-            // Delete table content and repopulate to reorder elements with new data-index to match volunteerRecords indexes.
-            const tableRows = document.querySelectorAll(".table-rows")
-            tableRows.forEach((row) => row.remove())
-            populateTable()
-        }
-    })
+                // Delete table content and repopulate to reorder elements with new data-index to match volunteerRecords indexes.
+                const tableRows = document.querySelectorAll(".table-rows")
+                tableRows.forEach((row) => row.remove())
+                populateTable()
+            }
+        })
+    }
 }
 
 /**
@@ -191,13 +198,60 @@ function applyBgColor() {
     const rows = document.querySelectorAll(".table-rows")
     for (const [index, row] of rows.entries()) {
         if (index % 2 === 0) {
-            row.style.backgroundColor = "#eee"
+            row.style.backgroundColor = "rgb(238, 238, 238)"
         }
     }
 }
 
+/**
+ * Calculates the total volunteer hours found the volunteerRecord and displays
+ * it below the volunteer table.
+ */
+function totalHours() {
+    const totalEl = document.querySelector("#table-section > h3")
+    let total = 0
+    for (const value of Object.values(volunteerRecords)) total += Number(value.hours)
+    if (totalEl) {
+        totalEl.textContent = `Total Voluntered Hours - ${total}H`
+        if (total === 0) {
+            totalEl.style.display = "none"
+        } else {
+            totalEl.style.display = "block"
+        }
+    }
+}
+
+/**
+ * Refines the date input field element by enabling entire field to
+ * be clickable, and limiting the calendar dates to today and the past.
+ */
+function customizeDateInput() {
+    // Event listener on the date input element that enables clicking
+    // anywhere on the element to select a date.
+    const volunteerDateInput = document.getElementById("volunteer-date")
+        if (volunteerDateInput) {
+            document.getElementById("volunteer-date").addEventListener("click", function(e) {
+            this.showPicker();
+            e.preventDefault();
+        });
+    }
+
+    // Limit max date selection to today in date input element
+    // Get today's date
+    const today = new Date();
+    today.setDate(today.getDate());
+
+    // Format as YYYY-MM-DD (local time)
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+
+    if (volunteerDateInput) volunteerDateInput.max = `${yyyy}-${mm}-${dd}`;
+}
+
 // On load, populates the volunteer table with the data from localStorage
 // and adds event listener on table's 'deletion buttons'.
+customizeDateInput()
 populateTable()
 deleteButtonsAction()
 
@@ -208,6 +262,12 @@ if (typeof module !== "undefined") {
         verifyValue,
         errorMessage,
         volunteerRecords,
-        valid
+        valid,
+        populateTable,
+        updateTable,
+        deleteButtonsAction,
+        applyBgColor,
+        totalHours,
+        customizeDateInput
     };
 }
