@@ -199,4 +199,56 @@ describe("Event Signup Unit Tests", () => {
         expect(document.getElementById("sponsor-count").textContent).toBe("0");
     });
 
+    test("table updates after data is added to localStorage", () => {
+    localStorage.setItem("eventSignups", JSON.stringify([
+        {
+            eventName: "Food Drive",
+            representativeName: "Ben",
+            representativeEmail: "ben@email.com",
+            role: "Sponsor"
+        }
+    ]));
+
+    document.body.innerHTML = `
+        <table>
+            <tbody id="event-table-body"></tbody>
+        </table>
+    `;
+
+    jest.resetModules();
+
+    const { populateTable } = require("./eventscript");
+
+    populateTable();
+
+    expect(document.getElementById("event-table-body").textContent)
+        .toContain("Food Drive");
+});
+
+    test("saved localStorage data is displayed in the table", () => {
+        localStorage.setItem("eventSignups", JSON.stringify([
+            {
+                eventName: "Community Cleanup",
+                representativeName: "Ben",
+                representativeEmail: "ben@email.com",
+                role: "Participant"
+            }
+        ]));
+
+        document.body.innerHTML = `
+            <table>
+                <tbody id="event-table-body"></tbody>
+            </table>
+        `;
+
+        jest.resetModules();
+
+        const { populateTable } = require("./eventscript");
+
+        populateTable();
+
+        expect(document.getElementById("event-table-body").textContent)
+            .toContain("Community Cleanup");
+    });
+
 });
