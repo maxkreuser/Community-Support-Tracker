@@ -125,4 +125,130 @@ describe("Event Signup Unit Tests", () => {
         alertSpy.mockRestore();
     });
 
+    test("summary section updates based on roles", () => {
+    localStorage.setItem("eventSignups", JSON.stringify([
+        { eventName: "Event 1", representativeName: "Ben", representativeEmail: "ben@email.com", role: "Sponsor" },
+        { eventName: "Event 2", representativeName: "John", representativeEmail: "john@email.com", role: "Participant" },
+        { eventName: "Event 3", representativeName: "Mary", representativeEmail: "mary@email.com", role: "Organizer" }
+    ]));
+
+    document.body.innerHTML = `
+        <span id="sponsor-count">0</span>
+        <span id="participant-count">0</span>
+        <span id="organizer-count">0</span>
+    `;
+
+    jest.resetModules();
+
+    const { updateSummary } = require("./eventscript");
+
+    updateSummary();
+
+    expect(document.getElementById("sponsor-count").textContent).toBe("1");
+    expect(document.getElementById("participant-count").textContent).toBe("1");
+    expect(document.getElementById("organizer-count").textContent).toBe("1");
+});
+
+    test("deleting a record updates localStorage and table", () => {
+        localStorage.setItem("eventSignups", JSON.stringify([
+            { eventName: "Food Drive", representativeName: "Ben", representativeEmail: "ben@email.com", role: "Sponsor" }
+        ]));
+
+        document.body.innerHTML = `
+            <table>
+                <tbody id="event-table-body"></tbody>
+            </table>
+            <span id="sponsor-count">0</span>
+            <span id="participant-count">0</span>
+            <span id="organizer-count">0</span>
+        `;
+
+        jest.resetModules();
+
+        const { deleteSignup } = require("./eventscript");
+
+        deleteSignup(0);
+
+        expect(JSON.parse(localStorage.getItem("eventSignups"))).toEqual([]);
+        expect(document.getElementById("event-table-body").textContent).not.toContain("Food Drive");
+    });
+
+    test("summary updates when a record is deleted", () => {
+        localStorage.setItem("eventSignups", JSON.stringify([
+            { eventName: "Food Drive", representativeName: "Ben", representativeEmail: "ben@email.com", role: "Sponsor" }
+        ]));
+
+        document.body.innerHTML = `
+            <table>
+                <tbody id="event-table-body"></tbody>
+            </table>
+            <span id="sponsor-count">0</span>
+            <span id="participant-count">0</span>
+            <span id="organizer-count">0</span>
+        `;
+
+        jest.resetModules();
+
+        const { deleteSignup, updateSummary } = require("./eventscript");
+
+        updateSummary();
+        expect(document.getElementById("sponsor-count").textContent).toBe("1");
+
+        deleteSignup(0);
+
+        expect(document.getElementById("sponsor-count").textContent).toBe("0");
+    });
+
+    test("table updates after data is added to localStorage", () => {
+    localStorage.setItem("eventSignups", JSON.stringify([
+        {
+            eventName: "Food Drive",
+            representativeName: "Ben",
+            representativeEmail: "ben@email.com",
+            role: "Sponsor"
+        }
+    ]));
+
+    document.body.innerHTML = `
+        <table>
+            <tbody id="event-table-body"></tbody>
+        </table>
+    `;
+
+    jest.resetModules();
+
+    const { populateTable } = require("./eventscript");
+
+    populateTable();
+
+    expect(document.getElementById("event-table-body").textContent)
+        .toContain("Food Drive");
+});
+
+    test("saved localStorage data is displayed in the table", () => {
+        localStorage.setItem("eventSignups", JSON.stringify([
+            {
+                eventName: "Community Cleanup",
+                representativeName: "Ben",
+                representativeEmail: "ben@email.com",
+                role: "Participant"
+            }
+        ]));
+
+        document.body.innerHTML = `
+            <table>
+                <tbody id="event-table-body"></tbody>
+            </table>
+        `;
+
+        jest.resetModules();
+
+        const { populateTable } = require("./eventscript");
+
+        populateTable();
+
+        expect(document.getElementById("event-table-body").textContent)
+            .toContain("Community Cleanup");
+    });
+
 });
