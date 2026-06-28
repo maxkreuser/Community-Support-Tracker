@@ -14,12 +14,14 @@
     </header>
 
     <nav>
+        <div id="blur"></div>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="donations.html">Donations</a></li>
             <li><a href="volunteer.html">Volunteer Hours</a></li>
             <li><a href="events.html">Event Signup</a></li>
         </ul>
+        <button id="icon-button"><ion-icon name="menu-outline"></ion-icon></button>
     </nav>
 
     <main>
@@ -37,7 +39,7 @@
                 </div>
                 <div>
                     <label for="volunteer-date">Date of volunteering</label>
-                    <input type="date" id="volunteer-date">
+                    <input type="date" id="volunteer-date" style="cursor: pointer;">
                 </div>
                 <div id="rating-container">
                     <label>Rate your experience</label>
@@ -64,17 +66,33 @@
             <div id="succes-container" class="hidden">
                 <div id="blur-overlay"></div>
                 <div id="succes-message">
-                    <p>Bravo! Your hours are well submitted.</p>
+                    <p>Success! Hours are registered.</p>
                 </div>
             </div>
         </section>
-        <div id="message"></div>
+        <!-- <div id="message"></div> -->
+        <section id="table-section">
+            <h2>List of Volunteer Hours</h2>
+            <table>
+                <tr>
+                    <th>Charity Name</th>
+                    <th>Volunteer<br>Hours</th>
+                    <th>Date</th>
+                    <th>Rating<br>Experience</th>
+                    <th>Remove Hours</th>
+                </tr>
+            </table>
+            <h3 style="display: none;"></h3>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2026 PiXELL River Financial</p>
     </footer>
 
+    <script src="script.js"></script>
     <script src="volunteerscript.js "></script>
+    <script type="module" src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

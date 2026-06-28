@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-const { initDonationForm } = require("./donation");
+const { initDonationForm } = require("./donations");
 
 describe("Donation Form Unit Tests", () => {
 

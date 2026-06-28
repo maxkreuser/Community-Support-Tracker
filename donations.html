@@ -15,12 +15,14 @@
     </header>
 
     <nav>
+        <div id="blur"></div>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="donations.html">Donations</a></li>
             <li><a href="volunteer.html">Volunteer Hours</a></li>
             <li><a href="events.html">Event Signup</a></li>
         </ul>
+        <button id="icon-button"><ion-icon name="menu-outline"></ion-icon></button>
     </nav>
 
     <main>
@@ -45,12 +47,34 @@
         </form>
 
         <div id="message"></div>
+
+        <section id="table-section">
+            <h2>List of Donations</h2>
+            <table>
+                <tr>
+                    <th>Charity Name</th>
+                    <th>Donation<br>Amount</th>
+                    <th>Date</th>
+                    <th>Comment<br>Experience</th>
+                    <th>Remove Donation</th>
+                </tr>
+            </table>
+            <h3 style="display: none;"></h3>
+        </section>
+
+        <section id="summary-section">
+            <h2>Donation Summary</h2>
+            <p>Total Amount Donated: <span id="total-donations">$0</span></p>
+        </section>
     </main>
 
     <footer>
         <p>&copy; 2026 PiXELL River Financial</p>
     </footer>
 
-    <script src="js/donations.js"></script>
+    <script src="script.js"></script>
+    <script src="donation.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@8.0.13/dist/ionicons/ionicons.js"></script>
 </body>
 </html>
